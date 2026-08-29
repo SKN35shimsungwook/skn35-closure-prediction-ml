@@ -1,0 +1,39 @@
+[1/3] 데이터 로드: C:\Users\playdata2\Downloads\modeling_dataset_refined_pjw.csv
+      ...읽는 중: 누적 300,000행 (표본 300,000행)
+      ...읽는 중: 누적 600,000행 (표본 600,000행)
+      ...읽는 중: 누적 900,000행 (표본 900,000행)
+      ...읽는 중: 누적 1,200,000행 (표본 1,200,000행)
+      ...읽는 중: 누적 1,500,000행 (표본 1,500,000행)
+      ...읽는 중: 누적 1,800,000행 (표본 1,800,000행)
+      ...읽는 중: 누적 1,889,582행 (표본 1,889,582행)
+      실제 로드된 행=1,889,582  features=31  positive_rate=0.1065  folds=[np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4)]
+[2/3] 3개 모델 학습 (5-fold 교차검증) ...
+      - LogisticRegression 학습 중...
+        fold 0 완료
+        fold 1 완료
+        fold 2 완료
+        fold 3 완료
+        fold 4 완료
+        PR-AUC=0.2346  ROC-AUC=0.6960  Precision=0.1847  Recall=0.6216  F1=0.2847  Brier=0.2192  (3.28분)
+      - RandomForestClassifier 학습 중...
+        fold 0 완료
+        fold 1 완료
+        fold 2 완료
+        fold 3 완료
+        fold 4 완료
+        PR-AUC=0.3638  ROC-AUC=0.7377  Precision=0.2225  Recall=0.5792  F1=0.3215  Brier=0.1972  (73.07분)
+      - LightGBM 학습 중...
+        fold 0 완료
+        fold 1 완료
+        fold 2 완료
+        fold 3 완료
+        fold 4 완료
+        PR-AUC=0.3760  ROC-AUC=0.7461  Precision=0.2282  Recall=0.5875  F1=0.3287  Brier=0.1900  (2.35분)
+
+[3/3] 결과 요약 (실제 데이터 표본 기준)
+                    모델   PR-AUC  ROC-AUC  Precision   Recall       F1    Brier  안정성(0~100)   학습시간(분)
+    LogisticRegression 0.234564 0.695968   0.184650 0.621552 0.284716 0.219191   99.511803  3.275958
+RandomForestClassifier 0.363764 0.737716   0.222475 0.579241 0.321475 0.197247   99.244246 73.071679
+              LightGBM 0.376021 0.746059   0.228231 0.587453 0.328737 0.190036   99.578857  2.353017
+
+저장 완료: results/benchmark_results_real_full.csv
