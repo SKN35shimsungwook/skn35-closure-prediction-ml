@@ -4,3 +4,6 @@ __pycache__/
 catboost_info/
 .ipynb_checkpoints/
 REPORT.html
+
+# 실데이터 (팀 프로젝트 전처리본, 저장소에 올리지 않음)
+data/features/modeling_dataset_refined_pjw.csv

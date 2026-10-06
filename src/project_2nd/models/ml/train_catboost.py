@@ -32,7 +32,9 @@ from sklearn.metrics import (
 
 warnings.filterwarnings("ignore")
 
-IN_PATH = r"C:\Users\playdata2\Downloads\modeling_dataset_refined_pjw.csv"
+from data_path import real_data_path
+
+IN_PATH = real_data_path()
 OUT_PATH = "results/benchmark_catboost.csv"
 
 TARGET = "is_closed_next"

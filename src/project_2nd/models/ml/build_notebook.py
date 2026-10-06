@@ -21,7 +21,7 @@ RandomForest / LightGBM(기본 파라미터) 3개를 5-fold로 이미 돌려봤�
 ))
 
 cells.append(nbf.v4.new_code_cell(
-"""import sys, time, warnings
+"""import os, sys, time, warnings
 from itertools import product
 
 import numpy as np
@@ -34,7 +34,7 @@ import lightgbm as lgb
 warnings.filterwarnings("ignore")
 pd.set_option("display.width", 120)
 
-IN_PATH = r"C:\\Users\\playdata2\\Downloads\\modeling_dataset_refined_pjw.csv"
+IN_PATH = os.environ.get("CLOSURE_DATA_PATH", "data/features/modeling_dataset_refined_pjw.csv")
 PREV_RESULTS_PATH = "results/benchmark_results_real_full.csv"
 TARGET = "is_closed_next"
 FOLD_COL = "fold"
