@@ -3,6 +3,7 @@
 **작성일**: 2026-08-30
 **데이터**: `modeling_dataset_refined_pjw.csv` (SKN35-2nd-3Team 프로젝트, pjw 팀원 전처리본)
 **목적**: 폐업확률 예측 모델 후보를 실데이터 기준으로 학습·비교하고, 최종 상권·업종 지표 설계에 쓸 모델을 선정하기 위한 벤치마크 기록
+**바로 실행해 보기**: [9. 재현 방법](#9-재현-방법) — 실데이터 없이 가짜 데이터로 전체 파이프라인을 돌려 볼 수 있습니다.
 
 ---
 
@@ -65,8 +66,10 @@ ml_dryrun/
 │   ├── train_and_evaluate_real.py   실데이터로 3모델(LogReg/RF/LightGBM) 학습·평가 (4~5단계)
 │   ├── train_catboost.py            CatBoost 단독 실행 스크립트 (7단계, 참고용으로 보존)
 │   ├── tune_lightgbm.py             LightGBM 하이퍼파라미터 그리드서치 단독 스크립트
+│   ├── data_path.py                 실데이터 경로를 한 곳에서 결정 (환경 변수 CLOSURE_DATA_PATH)
 │   ├── build_notebook.py            아래 노트북을 nbformat으로 조립하는 빌더
 │   └── execute_notebook.py          노트북을 헤드리스로 실행(nbclient), 실패해도 중간 결과 저장
+├── requirements.txt                 의존성 (핵심 4개는 버전 고정)
 ├── model_comparison.ipynb           6~7단계 실행 결과가 그대로 담긴 노트북 (표+그래프 출력 포함)
 ├── data/features/modeling_dataset_fake.csv   1단계 가짜 데이터
 ├── results/
@@ -181,3 +184,45 @@ ROC-AUC(판별력 자체)는 두 버전이 거의 같지만, **`scale_pos_weight
 구조를 그대로 흉내낸 독립 실험 저장소이며, 실제 팀 저장소에는 반영되지 않은
 개인 벤치마크 기록이다. 실제 데이터 파일(`modeling_dataset_refined_pjw.csv`, 694MB)은
 용량·보안상 이 저장소에 포함하지 않았다.
+
+## 9. 재현 방법
+
+모든 명령은 저장소 루트에서 실행합니다.
+
+```bash
+python -m venv .venv
+.venv\Scripts\activate          # macOS/Linux: source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+### 가짜 데이터로 실행 (데이터 없이 바로 가능)
+
+저장소에 들어 있는 `data/features/modeling_dataset_fake.csv`(실데이터 스키마를 흉내 낸 가짜 데이터)로
+전처리 → 5-fold 학습 → 평가지표 계산까지 전체 흐름을 확인할 수 있습니다.
+
+```bash
+python src/project_2nd/models/ml/train_and_evaluate.py
+```
+
+결과는 `results/benchmark_results.csv`에 저장됩니다. 가짜 데이터를 새로 만들려면
+`generate_fake_dataset.py`를 먼저 실행합니다.
+
+### 실데이터로 실행
+
+실데이터(`modeling_dataset_refined_pjw.csv`, 약 694MB)는 팀 프로젝트 전처리본이라 저장소에 포함하지 않았습니다.
+파일을 `data/features/`에 두거나, 다른 위치라면 환경 변수로 지정합니다.
+
+```bash
+# Windows PowerShell
+$env:CLOSURE_DATA_PATH = "D:/data/modeling_dataset_refined_pjw.csv"
+python src/project_2nd/models/ml/train_and_evaluate_real.py
+```
+
+| 스크립트 | 내용 | 결과 파일 |
+|---|---|---|
+| `train_and_evaluate_real.py` | LogReg / RandomForest / LightGBM 5-fold 비교 | `results/benchmark_results_real_full.csv` |
+| `tune_lightgbm.py` | LightGBM 하이퍼파라미터 그리드서치 | `results/lightgbm_tuning_results.csv` |
+| `train_catboost.py` | CatBoost 비교 (선택 의존성) | `results/benchmark_catboost.csv` |
+| `build_notebook.py` → `execute_notebook.py` | 최종 비교 노트북 생성·실행 | `model_comparison.ipynb`, `results/final_model_comparison.*` |
+
+데이터 파일이 없으면 스크립트가 바로 멈추고, 파일을 어디에 두면 되는지 안내합니다.
