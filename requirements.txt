@@ -1,0 +1,13 @@
+# 벤치마크 스크립트 (Python 3.12에서 검증)
+pandas==3.0.5
+numpy==2.5.2
+scikit-learn==1.9.0
+lightgbm==4.7.0
+
+# 선택: CatBoost 비교, 노트북 생성·실행, 보고서 PDF 변환
+catboost
+matplotlib
+nbformat
+nbclient
+ipykernel
+markdown
